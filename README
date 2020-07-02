@@ -1,0 +1,6 @@
+Here is the main directory, where all of the parsers go.
+
+We use Selenium and Scrapy Libraries for receiving the data from the websites.
+
+We are going to make an index file where we'll have a while function that will run the script at every 1am.
+
