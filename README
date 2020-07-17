@@ -1,6 +1,24 @@
-Here is the main directory, where all of the parsers go.
+MAIN_PATH : /home/miriani/Desktop/rightnao/drivers/chromedriver
 
-We use Selenium and Scrapy Libraries for receiving the data from the websites.
+THIS IS A MAIN REPOSITORY FOR SCRAPING SCRIPTS
 
-We are going to make an index file where we'll have a while function that will run the script at every 1am.
+THERE ARE EACH SEPARATE COUNTRIES.
 
+[main.py] scrapes all currently existing data from all the websites
+
+[daily.py] scrapes all the newly added data.
+
+
+Requirements:
+-Python3
+---Selenium
+---Scrapy
+---BS4
+-MongoDB
+
+
+
+
+
+Developerd By;
+Caravan2
