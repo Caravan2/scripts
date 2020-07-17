@@ -30,7 +30,7 @@ def Translate(text):
     # op.add_argument("headless")
 
 
-    driver = webdriver.Chrome("/home/miriani/Desktop/rightnao/drivers/chromedriver", options=op)
+    driver = webdriver.Chrome("/home/miriani/Desktop/rightnao/drivers/chromedriver")
 
     driver.implicitly_wait(5)
 

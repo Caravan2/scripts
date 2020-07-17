@@ -186,7 +186,7 @@ for div in range(1, 30):
             "job_details" : {
                 "url" : v_link,
                 "title" : position,
-                "country_id" : "AM",
+                "country_id" : "AZ",
                 "city" : [{"city" : "Baku", "id" : "587084"}],
                 "employment_type" : "Full Time",
                 "description" : [
