@@ -12,9 +12,8 @@ companydb = mydb["companies"]
 # azinka.az
 os.system('python3 /home/miriani/Desktop/rightnao/azerbaijan/azinka/final/azinka.py')
 
-
-
-
+# boss.az
+os.system("python3 /home/miriani/Desktop/rightnao/azerbaijan/boss/final/boss.py")
 
 
 

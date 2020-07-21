@@ -25,7 +25,7 @@ months = {
     }
 
 def Translate(text):
-    driver = webdriver.Chrome("/home/miriani/Desktop/rightnao/drivers/chromedriver"))
+    driver = webdriver.Chrome("/home/miriani/Desktop/rightnao/drivers/chromedriver")
 
     driver.implicitly_wait(5)
 

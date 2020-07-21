@@ -2,23 +2,25 @@ import requests
 import re
 import time
 import pymongo
+import string
 from bs4 import BeautifulSoup
 from scrapy.selector import Selector
 from w3lib.html import remove_tags
 from geonames_en import Geonames
 from translator import Translate
+from bia import BiaFunction
 from langdetect import detect
-import sys
 from bson import ObjectId
 import datetime
-sys.path.append("/home/miriani/Desktop/main")
-# from instantiate import InstantiateJob, InstantiateUser, InstantiateCompany
+import sys
+# sys.path.append("/home/miriani/Desktop/main")
+
 
 myclient = pymongo.MongoClient("mongodb://localhost:27017/")
-mydb = myclient["Jobs"]
-jobdb = mydb["job"]
+mydb = myclient["sales_db"]
+jobdb = mydb["jobs"]
 userdb = mydb["user"]
-companydb = mydb["company"]
+companydb = mydb["companies"]
 
 months = {
     "January": "01",
@@ -38,6 +40,11 @@ months = {
 t = time.localtime()
 year = time.strftime("%Y", t)
 year = int(year)
+
+today = datetime.date.today()
+yesterday = today - datetime.timedelta(days=1)
+yesterday_day = int(yesterday.strftime("%d"))
+
 
 
 url_0 = ["http://www.dasaqmeba.ge/home/load/?lan=en", "http://www.dasaqmeba.ge/home/load/120?lan=en"]
@@ -66,15 +73,14 @@ try:
         
         try:
             published = Selector(response=page_0).xpath(f'//*[@id="vipAdsList"]/tbody/tr[{vip}]/td[4]/text()').get()
-            publish_day = published.split(" ")[0].rstrip()
-            publish_day = publish_day.lstrip()
+            publish_day = int(published.split(" ")[0])
             publish_month = int(months[f"{published.split(' ')[1]}"])
             publish_year = year
         except:
             publish_day = ""
             publish_month = ""
             publish_year = ""
-        if int(publish_day) < int(time.strftime("%d")) - 1:
+        if yesterday_day != publish_day:
             break
         
         try:
@@ -96,27 +102,28 @@ try:
             location = Selector(response=page).xpath(f'//*[@id="main_content"]/div[3]/form/div/div[2]/table/tr[contains(.,"Location")]/td[2]/span[1]/text()').get()
             location = location.rstrip()
             lcoation = location.lstrip()
-            location_id = []
-            try:
-                location_id.append({ "Location" : f"{location}", "ID" : f"{Geonames(location)}" } )
-            except:
-                location_id.append({ "Location" : f"{location}", "ID" : "" } )
         except:
-            location_id = ""
+            location = ""
 
             
         try:
             salary = Selector(response=page).xpath(f'//*[@id="main_content"]/div[3]/form/div/div[2]/table/tr[contains(.,"Salary")]/td[2]/span[1]/text()').get()
             salary = salary.rstrip()
             salary = salary.lstrip()
+            print(salary)
         except:
-            salary = ""
+            salary = 0
         if "-" in salary:
             max_salary = salary.split("-")[1]
+            max_salary = re.sub('\D', '', max_salary)
+            max_salary = int(max_salary)
             min_salary = salary.split("-")[0]
+            min_salary = re.sub('\D', '', min_salary)
+            min_salary - int(min_salary)
         else:
-            max_salary = salary
-            min_salary = salary
+            min_salary = max_salary = int(salary)
+            # salary = re.sub('\D', '', salary)
+            # min_salary = max_salary = int(salary)
 
             
         try:
@@ -151,11 +158,18 @@ try:
             location = Selector(response=page).xpath(f'//*[@id="main_content"]/div[3]/form/div/div[2]/table/tr[contains(.,"Location:")]/td[2]/span[1]/text()').get()
             location = lcoation.rstrip()
             location = location.lstrip()
+            location_id = []
+            try:
+                location_id.append({ "city" : f"{location}", "id" : f"{Geonames(location)}" } )
+            except:
+                location_id.append({ "city" : f"{location}", "id" : "611717" } )
         except:
-            location = ""
+            location_id = [{"city" : "Tbilisi", "id" : "611717"}]
             
         try:
             phone = Selector(response=page).xpath('//*[@id="main_content"]/div[3]/div[3]/div[2]/p[2]/span[contains(.,"5")]/text()').get()
+            if phone is None:
+                phone = ""
         except:
             phone = ""
 
@@ -184,61 +198,104 @@ try:
         }
         print(x)
 
+        # Check if company already exists in a collection
         check = companydb.find_one({"name" : company})
         # Dunmping into MongoDB - at this point it has unique structure (meaning, fits for every option)
         if check is None:
-            new_company_info = {
-                "name" : company,
-                "url" : logo,
-                "created_at" : datetime.datetime.utcnow(),
-                "country" : "GE"
-            }
-            companydb.insert(new_company_info)
-            company_object_id = companydb.find_one({"name" : company})
-            company_object_id = company_object_id["_id"]
-            print(company_object_id)
-            print("done")
+            bia_data = BiaFunction(company)
+            print(bia_data)
+            if "No info" not in bia_data:
+                new_company_info = {
+                    "name" : bia_data["name"],
+                    "logo" : logo,
+                    "industry" : "1",
+                    "created_at" : datetime.datetime.utcnow(),
+                    "websites" : bia_data["websites"],
+                    "emails" : bia_data["emails"],
+                    "phones" : bia_data["phones"],
+                    "foundation_date" : bia_data["foundation_date"],
+                    "vat" : bia_data["vat"],
+                    "addresses" : bia_data["addresses"],
+                    "business_hours" : bia_data["business_hours"],
+                    "country" : "GE"
+                }
+                company_object_id = companydb.insert(new_company_info)
+            else:
+                new_company_info = {
+                    "name" : company,
+                    "url" : logo,
+                    "created_at" : datetime.datetime.utcnow(),
+                    "country" : "GE"
+                }
+                companydb.insert(new_company_info)
+                company_object_id = companydb.find_one({"name" : company})
+                company_object_id = company_object_id["_id"]
+                print(company_object_id)
+                print("done")
         else:
             company_object_id = companydb.find_one({"name" : company})
             company_object_id = company_object_id["_id"]
-            print(company_object_id)
+            print("Company already exists: ", company_object_id)
         
         
+
+
+        # Vacancy User
         if email == "":
-            check = userdb.find_one({"phone" : phone})
-            if check is None:
-                new_user_info = {
-                    "email" : email,
-                    "phone" : phone,
-                    "company_id" : company_object_id,
-                    "created_at" : datetime.datetime.utcnow()
-                }
-                userdb.insert(new_user_info)
-                user_object_id = userdb.find_one({"phone" : phone})
-                user_object_id = user_object_id["_id"]
-                print(user_object_id)
+            if phone == "":
+                user_object_id = 100000000000000000000000
             else:
-                user_object_id = userdb.find_one({"phone" : phone})
-                user_object_id = user_object_id["_id"]
-                print(user_object_id)
+                check = userdb.find_one({"phone" : [{"country_code" : "995", "number" : phone}]})
+                if check is None:
+                    new_user_info = {
+                        "phone" : [{"country_code" : "995", "number" : phone}],
+                        "company_id" : company_object_id,
+                        "created_at" : datetime.datetime.utcnow()
+                    }
+                    userdb.insert(new_user_info)
+                    user_object_id = userdb.find_one({"phone" : [{"country_code" : "995", "number" : phone}]})
+                    user_object_id = user_object_id["_id"]
+                    print(user_object_id)
+                else:
+                    user_object_id = userdb.find_one({"phone" : [{"country_code" : "995", "number" : phone}]})
+                    user_object_id = user_object_id["_id"]
+                    print(user_object_id)
         else:
-            check = userdb.find_one({"email" : email})
-            if check is None:
-                new_user_info = {
-                    "email" : email,
-                    "phone" : phone,
-                    "company_id" : company_object_id,
-                    "created_at" : datetime.datetime.utcnow()
-                }
-                userdb.insert(new_user_info)
-                user_object_id = userdb.find_one({"email" : email})
-                user_object_id = user_object_id["_id"]
-                print(user_object_id)
+            if phone == "":
+                check = userdb.find_one({"email" : email})
+                if check is None:
+                    new_user_info = {
+                        "email" : email,
+                        "company_id" : company_object_id,
+                        "created_at" : datetime.datetime.utcnow()
+                    }
+                    userdb.insert(new_user_info)
+                    user_object_id = userdb.find_one({"email" : email})
+                    user_object_id = user_object_id["_id"]
+                    print(user_object_id)
+                else:
+                    user_object_id = userdb.find_one({"email" : email})
+                    user_object_id = user_object_id["_id"]
+                    print(user_object_id)
             else:
-                user_object_id = userdb.find_one({"email" : email})
-                user_object_id = user_object_id["_id"]
-                print(user_object_id)
+                check = userdb.find_one({"email" : email})
+                if check is None:
+                    new_user_info = {
+                        "email" : email,
+                        "phone" : phone,
+                        "company_id" : company_object_id,
+                        "created_at" : datetime.datetime.utcnow()
+                    }
+                    userdb.insert(new_user_info)
+                    user_object_id = userdb.find_one({"email" : email})
+                    user_object_id = user_object_id["_id"]
+                    print(user_object_id)
+                else:
+                    user_object_id = userdb.find_one({"email" : email})
+                    user_object_id = user_object_id["_id"]
+                    print(user_object_id)
         
+
         new_job_info = {
             "user_id" : ObjectId(f"{user_object_id}"),
             'company_id' : ObjectId(f"{company_object_id}"),
@@ -266,6 +323,7 @@ try:
             },
             "vacancy_type" : "VIP",
             "created_at" : datetime.datetime.utcnow(),
+            "source" : "dasaqmeba.ge",
             "status" : "active"
         }
         jobdb.insert(new_job_info)
@@ -275,6 +333,24 @@ except Exception as e:
     
     
     
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
     
     
 for url_0 in url_0:
@@ -304,15 +380,14 @@ for url_0 in url_0:
 
                 try:
                     published = Selector(response=page_0).xpath(f'//*[@id="allAdsList"]/tbody/tr[{number}]/td[4]/text()').get()
-                    publish_day = published.split(" ")[0].rstrip()
-                    publish_day = publish_day.lstrip()
+                    publish_day = int(published.split(" ")[0])
                     publish_month = int(months[f"{published.split(' ')[1]}"])
                     publish_year = year
                 except:
                     publish_day = ""
                     publish_month = ""
                     publish_year = ""
-                if int(publish_day) < int(time.strftime("%d")) - 1:
+                if yesterday_day != publish_day:
                     break
 
                 try:
@@ -337,11 +412,11 @@ for url_0 in url_0:
                     lcoation = location.lstrip()
                     location_id = []
                     try:
-                        location_id.append({ "Location" : f"{location}", "ID" : f"{Geonames(location)}" } )
+                        location_id.append({ "city" : f"{location}", "id" : f"{Geonames(location)}" } )
                     except:
-                        location_id.append({ "Location" : f"{location}", "ID" : "" } )
+                        location_id.append({ "city" : f"{location}", "id" : "611717" } )
                 except:
-                    location_id = ""
+                    location_id = [{"city" : "Tbilisi", "id" : "611717"}]
 
 
                 try:
@@ -349,13 +424,17 @@ for url_0 in url_0:
                     salary = salary.rstrip()
                     salary = salary.lstrip()
                 except:
-                    salary = ""
+                    salary = 0
                 if "-" in salary:
                     max_salary = salary.split("-")[1]
+                    max_salary = re.sub('\D', '', max_salary)
+                    max_salary = int(max_salary)
                     min_salary = salary.split("-")[0]
+                    min_salary = re.sub('\D', '', min_salary)
+                    min_salary = int(min_salary)
                 else:
-                    max_salary = salary
-                    min_salary = salary
+                    salary = re.sub('\D', '', salary)
+                    min_salary = max_salary = int(salary)
 
 
                 try:
@@ -395,6 +474,8 @@ for url_0 in url_0:
 
                 try:
                     phone = Selector(response=page).xpath('//*[@id="main_content"]/div[3]/div[3]/div[2]/p[2]/span[contains(.,"5")]/text()').get()
+                    if phone is None:
+                        phone = ""
                 except:
                     phone = ""
 
@@ -428,58 +509,100 @@ for url_0 in url_0:
                 print(check)
                 # Dunmping into MongoDB - at this point it has unique structure (meaning, fits for every option)
                 if check is None:
-                    new_company_info = {
-                        "name" : company,
-                        "url" : logo,
-                        "created_at" : datetime.datetime.utcnow(),
-                        "country" : "GE"
-                    }
-                    companydb.insert(new_company_info)
-                    company_object_id = companydb.find_one({"name" : company})
-                    company_object_id = company_object_id["_id"]
-                    print(company_object_id)
-                    print("done")
+                    bia_data = BiaFunction(company)
+                    print(bia_data)
+                    if "No info" not in bia_data:
+                        new_company_info = {
+                            "name" : bia_data["name"],
+                            "logo" : logo,
+                            "industry" : "1",
+                            "created_at" : datetime.datetime.utcnow(),
+                            "websites" : bia_data["websites"],
+                            "emails" : bia_data["emails"],
+                            "phones" : bia_data["phones"],
+                            "foundation_date" : bia_data["foundation_date"],
+                            "vat" : bia_data["vat"],
+                            "addresses" : bia_data["addresses"],
+                            "business_hours" : bia_data["business_hours"],
+                            "country" : "GE"
+                        }
+                        company_object_id = companydb.insert(new_company_info)
+                    else:
+                        new_company_info = {
+                            "name" : company,
+                            "url" : logo,
+                            "created_at" : datetime.datetime.utcnow(),
+                            "country" : "GE"
+                        }
+                        companydb.insert(new_company_info)
+                        company_object_id = companydb.find_one({"name" : company})
+                        company_object_id = company_object_id["_id"]
+                        print(company_object_id)
+                        print("done")
                 else:
                     company_object_id = companydb.find_one({"name" : company})
                     company_object_id = company_object_id["_id"]
-                    print(company_object_id)
+                    print("Company already exists: ", company_object_id)
                 
+
                 
+                # Vacancy User
                 if email == "":
-                    check = userdb.find_one({"phone" : phone})
-                    if check is None:
-                        new_user_info = {
-                            "email" : email,
-                            "phone" : phone,
-                            "company_id" : company_object_id,
-                            "created_at" : datetime.datetime.utcnow()
-                        }
-                        userdb.insert(new_user_info)
-                        user_object_id = userdb.find_one({"phone" : phone})
-                        user_object_id = user_object_id["_id"]
-                        print(user_object_id)
+                    if phone == "":
+                        user_object_id = 100000000000000000000000
                     else:
-                        user_object_id = userdb.find_one({"phone" : phone})
-                        user_object_id = user_object_id["_id"]
-                        print(user_object_id)
+                        check = userdb.find_one({"phone" : [{"country_code" : "995", "number" : phone}]})
+                        if check is None:
+                            new_user_info = {
+                                "phone" : [{"country_code" : "995", "number" : phone}],
+                                "company_id" : company_object_id,
+                                "created_at" : datetime.datetime.utcnow()
+                            }
+                            userdb.insert(new_user_info)
+                            user_object_id = userdb.find_one({"phone" : [{"country_code" : "995", "number" : phone}]})
+                            user_object_id = user_object_id["_id"]
+                            print(user_object_id)
+                        else:
+                            user_object_id = userdb.find_one({"phone" : [{"country_code" : "995", "number" : phone}]})
+                            user_object_id = user_object_id["_id"]
+                            print(user_object_id)
                 else:
-                    check = userdb.find_one({"email" : email})
-                    if check is None:
-                        new_user_info = {
-                            "email" : email,
-                            "phone" : phone,
-                            "company_id" : company_object_id,
-                            "created_at" : datetime.datetime.utcnow()
-                        }
-                        userdb.insert(new_user_info)
-                        user_object_id = userdb.find_one({"email" : email})
-                        user_object_id = user_object_id["_id"]
-                        print(user_object_id)
+                    if phone == "":
+                        check = userdb.find_one({"email" : email})
+                        if check is None:
+                            new_user_info = {
+                                "email" : email,
+                                "company_id" : company_object_id,
+                                "created_at" : datetime.datetime.utcnow()
+                            }
+                            userdb.insert(new_user_info)
+                            user_object_id = userdb.find_one({"email" : email})
+                            user_object_id = user_object_id["_id"]
+                            print(user_object_id)
+                        else:
+                            user_object_id = userdb.find_one({"email" : email})
+                            user_object_id = user_object_id["_id"]
+                            print(user_object_id)
                     else:
-                        user_object_id = userdb.find_one({"email" : email})
-                        user_object_id = user_object_id["_id"]
-                        print(user_object_id)
+                        check = userdb.find_one({"email" : email})
+                        if check is None:
+                            new_user_info = {
+                                "email" : email,
+                                "phone" : phone,
+                                "company_id" : company_object_id,
+                                "created_at" : datetime.datetime.utcnow()
+                            }
+                            userdb.insert(new_user_info)
+                            user_object_id = userdb.find_one({"email" : email})
+                            user_object_id = user_object_id["_id"]
+                            print(user_object_id)
+                        else:
+                            user_object_id = userdb.find_one({"email" : email})
+                            user_object_id = user_object_id["_id"]
+                            print(user_object_id)
                 
+
+
                 new_job_info = {
                     "user_id" : ObjectId(f"{user_object_id}"),
                     'company_id' : ObjectId(f"{company_object_id}"),

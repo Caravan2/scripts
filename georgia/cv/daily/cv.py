@@ -54,7 +54,7 @@ cookies = Get_Cookies("https://www.cv.ge")
 options = webdriver.ChromeOptions()
 options.add_argument("--start-maximized")
 
-driver = webdriver.Chrome("/home/miriani/Desktop/rightnao/drivers/chromedriver"), chrome_options=options)
+driver = webdriver.Chrome("/home/miriani/Desktop/rightnao/drivers/chromedriver", chrome_options=options)
 
 driver.get(f"https://www.cv.ge/announcements/all?page=1")
 driver.find_element_by_xpath('//*[@id="page"]/header/div/div/div/div/nav/ul/li[4]/a').click()
@@ -82,7 +82,7 @@ for page in range(1, 7):
                     company = driver.find_element_by_xpath(f'//*[@id="page"]/main/div/div/div[1]/div[2]/div[{div}]/div[1]/div/a').text
                 except Exception as e:
                     company = ""
-                if company = "":
+                if company == "":
                     continue
                 # //*[@id="page"]/main/div/div/div[1]/div[2]/div[1]/div[1]/div/a
                 # //*[@id="page"]/main/div/div/div[1]/div[2]/div[2]/div[1]/div/a

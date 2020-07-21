@@ -43,6 +43,7 @@ yesterday_month = int(yesterday.strftime("%m"))
 
 
 def Vacancy(link):
+    print("Vacancy started scraping Succesfully")
     url = link
     headers = {"User-Agent": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/77.0.3865.75 Safari/537.36", "Accept-Language": "en-US,en;q=0.9,ru;q=0.8"}
     page = requests.get(url, headers=headers)

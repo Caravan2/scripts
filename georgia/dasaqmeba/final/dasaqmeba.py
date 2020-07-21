@@ -161,6 +161,8 @@ try:
             
         try:
             phone = Selector(response=page).xpath('//*[@id="main_content"]/div[3]/div[3]/div[2]/p[2]/span[contains(.,"5")]/text()').get()
+            if phone is None:
+                phone = ""
         except:
             phone = ""
 
@@ -236,19 +238,19 @@ try:
             if phone == "":
                 user_object_id = 100000000000000000000000
             else:
-                check = userdb.find_one({"phone" : phone})
+                check = userdb.find_one({"phone" : [{"country_code" : "995", "number" : phone}]})
                 if check is None:
                     new_user_info = {
-                        "phone" : phone,
+                        "phone" : [{"country_code" : "995", "number" : phone}],
                         "company_id" : company_object_id,
                         "created_at" : datetime.datetime.utcnow()
                     }
                     userdb.insert(new_user_info)
-                    user_object_id = userdb.find_one({"phone" : phone})
+                    user_object_id = userdb.find_one({"phone" : [{"country_code" : "995", "number" : phone}]})
                     user_object_id = user_object_id["_id"]
                     print(user_object_id)
                 else:
-                    user_object_id = userdb.find_one({"phone" : phone})
+                    user_object_id = userdb.find_one({"phone" : [{"country_code" : "995", "number" : phone}]})
                     user_object_id = user_object_id["_id"]
                     print(user_object_id)
         else:
@@ -463,6 +465,8 @@ for url_0 in url_0:
 
                 try:
                     phone = Selector(response=page).xpath('//*[@id="main_content"]/div[3]/div[3]/div[2]/p[2]/span[contains(.,"5")]/text()').get()
+                    if phone is None:
+                        phone = ""
                 except:
                     phone = ""
 
@@ -533,23 +537,24 @@ for url_0 in url_0:
                 
 
                 
+                # Vacancy User
                 if email == "":
                     if phone == "":
                         user_object_id = 100000000000000000000000
                     else:
-                        check = userdb.find_one({"phone" : phone})
+                        check = userdb.find_one({"phone" : [{"country_code" : "995", "number" : phone}]})
                         if check is None:
                             new_user_info = {
-                                "phone" : phone,
+                                "phone" : [{"country_code" : "995", "number" : phone}],
                                 "company_id" : company_object_id,
                                 "created_at" : datetime.datetime.utcnow()
                             }
                             userdb.insert(new_user_info)
-                            user_object_id = userdb.find_one({"phone" : phone})
+                            user_object_id = userdb.find_one({"phone" : [{"country_code" : "995", "number" : phone}]})
                             user_object_id = user_object_id["_id"]
                             print(user_object_id)
                         else:
-                            user_object_id = userdb.find_one({"phone" : phone})
+                            user_object_id = userdb.find_one({"phone" : [{"country_code" : "995", "number" : phone}]})
                             user_object_id = user_object_id["_id"]
                             print(user_object_id)
                 else:

@@ -9,7 +9,7 @@ def Get_Cookies(link):
     options = webdriver.ChromeOptions()
     options.add_argument("--start-maximized")
 
-    driver = webdriver.Chrome("/home/miriani/Desktop/rightnao/drivers/chromedriver"), chrome_options=options)
+    driver = webdriver.Chrome("/home/miriani/Desktop/rightnao/drivers/chromedriver", chrome_options=options)
 
     driver.get(f"{link}")
     driver.find_element_by_xpath('//*[@id="page"]/header/div/div/div/div/nav/ul/li[4]/a').click()

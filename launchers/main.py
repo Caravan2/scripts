@@ -108,6 +108,9 @@ os.system("python3 /home/miriani/Desktop/rightnao/armenia/hr/final/hr.py")
 # azinka.az
 os.system('python3 /home/miriani/Desktop/rightnao/azerbaijan/azinka/final/azinka.py')
 
+# boss.az
+os.system("python3 /home/miriani/Desktop/rightnao/azerbaijan/boss/final/boss.py")
+
 
 
 
