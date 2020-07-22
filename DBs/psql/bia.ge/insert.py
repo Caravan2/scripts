@@ -56,7 +56,7 @@ for i in range(1, 140000):
                 location_id = None
 
             # Splitting house number from a street
-            possibilities1 = ["str.", "Str.", "Ave.", "ln.", "Ln.", "Plateau", "settlement", "mass.", "sq.", "Sq.", "In.", "In", "Highway", "Alley", "cul-de-sac", "(Temka)", "Plot.", "Range", "Ascent", "Embankment"]
+            possibilities1 = ["str.", "Str.", "Ave.", "ln.", "Ln.", "Plateau", "settlement", "mass.", "sq.", "Sq.", "In.", "In", "Highway", "Alley", "cul-de-sac", "(Temka)", "Plot.", "Range", "Ascent", "Embankment", "Q."]
             possibilities2 = ["Vazha-Pshavela", "Varketili", "Vazisubani", "Sanzona"]
             for each in possibilities1:
                 if each in appartment:
