@@ -1,5 +1,4 @@
 import pymongo
-from cookies import Get_Cookies
 from geonames_en import Geonames
 from selenium import webdriver
 from selenium.webdriver.common.keys import Keys

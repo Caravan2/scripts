@@ -72,9 +72,9 @@ try:
             publish_month = int(months[f"{published.split(' ')[1]}"])
             publish_year = year
         except:
-            publish_day = ""
-            publish_month = ""
-            publish_year = ""
+            publish_day = 0
+            publish_month = 0
+            publish_year = 0
         
         try:
             ends = Selector(response=page_0).xpath(f'//*[@id="vipAdsList"]/tbody/tr[{vip}]/td[5]/text()').get()
@@ -82,9 +82,9 @@ try:
             deadline_month = int(months[f"{ends.split(' ')[1]}"])
             deadline_year = year
         except:
-            deadline_day = ""
-            deadline_month = ""
-            deadline_year = ""
+            deadline_day = 0
+            deadline_month = 0
+            deadline_year = 0
         
         
         
@@ -153,9 +153,9 @@ try:
             location = location.lstrip()
             location_id = []
             try:
-                location_id.append({ "city" : f"{location}", "id" : f"{Geonames(location)}" } )
+                location_id.append({ "city" : f"{location.strip()}", "id" : f"{Geonames(location.strip())}" } )
             except:
-                location_id.append({ "city" : f"{location}", "id" : "611717" } )
+                location_id.append({ "city" : f"{location.strip()}", "id" : "611717" } )
         except:
             location_id = [{"city" : "Tbilisi", "id" : "611717"}]
             
@@ -275,7 +275,7 @@ try:
                 if check is None:
                     new_user_info = {
                         "email" : email,
-                        "phone" : phone,
+                        "phone" : [{"country_code" : "995", "number" : phone}],
                         "company_id" : company_object_id,
                         "created_at" : datetime.datetime.utcnow()
                     }
@@ -377,9 +377,9 @@ for url_0 in url_0:
                     publish_month = int(months[f"{published.split(' ')[1]}"])
                     publish_year = year
                 except:
-                    publish_day = ""
-                    publish_month = ""
-                    publish_year = ""
+                    publish_day = 0
+                    publish_month = 0
+                    publish_year = 0
 
                 try:
                     ends = Selector(response=page_0).xpath(f'//*[@id="allAdsList"]/tbody/tr[{number}]/td[5]/text()').get()
@@ -387,9 +387,9 @@ for url_0 in url_0:
                     deadline_month = int(months[f"{ends.split(' ')[1]}"])
                     deadline_year = year
                 except:
-                    deadline_day = ""
-                    deadline_month = ""
-                    deadline_year = ""
+                    deadline_day = 0
+                    deadline_month = 0
+                    deadline_year = 0
                     
                     
                     
@@ -403,9 +403,9 @@ for url_0 in url_0:
                     lcoation = location.lstrip()
                     location_id = []
                     try:
-                        location_id.append({ "city" : f"{location}", "id" : f"{Geonames(location)}" } )
+                        location_id.append({ "city" : f"{location.strip()}", "id" : f"{Geonames(location.strip())}" } )
                     except:
-                        location_id.append({ "city" : f"{location}", "id" : "611717" } )
+                        location_id.append({ "city" : f"{location.strip()}", "id" : "611717" } )
                 except:
                     location_id = [{"city" : "Tbilisi", "id" : "611717"}]
 
@@ -579,7 +579,7 @@ for url_0 in url_0:
                         if check is None:
                             new_user_info = {
                                 "email" : email,
-                                "phone" : phone,
+                                "phone" : [{"country_code" : "995", "number" : phone}],
                                 "company_id" : company_object_id,
                                 "created_at" : datetime.datetime.utcnow()
                             }
