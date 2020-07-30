@@ -1,0 +1,19 @@
+#######################################################################
+
+########### Scraping Individual Entrepreneurs in Georgia ##############
+
+#######################################################################
+
+We are scraping https://www.companyinfo.ge
+This is a webpage for individual Entrepreneurs
+
+data: name, id_code, legal_form, foundation_date, source_information, address, email
+
+
+--app.py
+--log.txt
+--check.txt
+
+app.py     --- contains a main script
+log.txt    --- all the errors are written in this file automatically
+check.tx   --- If any of the individual Entrepreneurs is not detected, their web_id is written in this file
