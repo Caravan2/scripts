@@ -16,7 +16,8 @@ def create_tables():
             name VARCHAR(255) NOT NULL,
             vat_number VARCHAR(225),
             logo bytea,
-            foundation_date VARCHAR(225)
+            foundation_date VARCHAR(225),
+            tax_id VARCHAR(225),
         )
         """,
         """

@@ -1,0 +1,54 @@
+{"_id":{"$oid":"5f23c87a024d7ded43a06aef"},"position":"business development manager","number":{"$numberInt":"27"}}
+{"_id":{"$oid":"5f23c87c024d7ded43a06af0"},"position":"react front end developer","number":{"$numberInt":"26"}}
+{"_id":{"$oid":"5f23c87d024d7ded43a06af1"},"position":"sales specialist","number":{"$numberInt":"28"}}
+{"_id":{"$oid":"5f23c87e024d7ded43a06af2"},"position":"java developer","number":{"$numberInt":"30"}}
+{"_id":{"$oid":"5f23c87f024d7ded43a06af3"},"position":"full stack developer","number":{"$numberInt":"27"}}
+{"_id":{"$oid":"5f23c880024d7ded43a06af4"},"position":"graphic designer   contractor","number":{"$numberInt":"26"}}
+{"_id":{"$oid":"5f23c881024d7ded43a06af5"},"position":"project manager","number":{"$numberInt":"14"}}
+{"_id":{"$oid":"5f23c882024d7ded43a06af6"},"position":"customer support specialist","number":{"$numberInt":"32"}}
+{"_id":{"$oid":"5f23c885024d7ded43a06af7"},"position":"accountant","number":{"$numberInt":"16"}}
+{"_id":{"$oid":"5f23c887024d7ded43a06af8"},"position":"sales manager","number":{"$numberInt":"16"}}
+{"_id":{"$oid":"5f23c88b024d7ded43a06af9"},"position":"graphic designer","number":{"$numberInt":"13"}}
+{"_id":{"$oid":"5f23c89d024d7ded43a06afa"},"position":"responsible for market development","number":{"$numberInt":"21"}}
+{"_id":{"$oid":"5f23c8a4024d7ded43a06afb"},"position":"sales consultant","number":{"$numberInt":"11"}}
+{"_id":{"$oid":"5f23c8a5024d7ded43a06afc"},"position":"treasurer","number":{"$numberInt":"43"}}
+{"_id":{"$oid":"5f23c8a6024d7ded43a06afd"},"position":"cook assistant","number":{"$numberInt":"15"}}
+{"_id":{"$oid":"5f23c8ad024d7ded43a06afe"},"position":"waitress","number":{"$numberInt":"18"}}
+{"_id":{"$oid":"5f23c8ae024d7ded43a06aff"},"position":"secretary","number":{"$numberInt":"24"}}
+{"_id":{"$oid":"5f23c8af024d7ded43a06b00"},"position":"marketer","number":{"$numberInt":"12"}}
+{"_id":{"$oid":"5f23c8b2024d7ded43a06b01"},"position":"shipper","number":{"$numberInt":"17"}}
+{"_id":{"$oid":"5f23c8b4024d7ded43a06b02"},"position":"furniture maker","number":{"$numberInt":"11"}}
+{"_id":{"$oid":"5f23c8ba024d7ded43a06b03"},"position":"3d artist   animator","number":{"$numberInt":"25"}}
+{"_id":{"$oid":"5f23c8bb024d7ded43a06b04"},"position":"business support assistant   social media specialist sc","number":{"$numberInt":"25"}}
+{"_id":{"$oid":"5f23c8be024d7ded43a06b05"},"position":"ui ux designer","number":{"$numberInt":"25"}}
+{"_id":{"$oid":"5f23c9cd024d7ded43a06b06"},"position":"online work","number":{"$numberInt":"11"}}
+{"_id":{"$oid":"5f23c9ce024d7ded43a06b07"},"position":"work from home","number":{"$numberInt":"19"}}
+{"_id":{"$oid":"5f23c9d0024d7ded43a06b08"},"position":"driver shipper","number":{"$numberInt":"17"}}
+{"_id":{"$oid":"5f23c9d2024d7ded43a06b09"},"position":"computer operator","number":{"$numberInt":"16"}}
+{"_id":{"$oid":"5f23c9d4024d7ded43a06b0a"},"position":"work","number":{"$numberInt":"12"}}
+{"_id":{"$oid":"5f23c9d6024d7ded43a06b0b"},"position":"manager","number":{"$numberInt":"38"}}
+{"_id":{"$oid":"5f23c9da024d7ded43a06b0c"},"position":"cleaner","number":{"$numberInt":"59"}}
+{"_id":{"$oid":"5f23c9dd024d7ded43a06b0d"},"position":"worker","number":{"$numberInt":"34"}}
+{"_id":{"$oid":"5f23c9e2024d7ded43a06b0e"},"position":"dishwasher","number":{"$numberInt":"16"}}
+{"_id":{"$oid":"5f23c9e4024d7ded43a06b0f"},"position":"bartender","number":{"$numberInt":"16"}}
+{"_id":{"$oid":"5f23c9e9024d7ded43a06b10"},"position":"office work","number":{"$numberInt":"30"}}
+{"_id":{"$oid":"5f23c9ea024d7ded43a06b11"},"position":"saleswoman","number":{"$numberInt":"37"}}
+{"_id":{"$oid":"5f23c9fb024d7ded43a06b12"},"position":"manghal specialist","number":{"$numberInt":"14"}}
+{"_id":{"$oid":"5f23c9fc024d7ded43a06b13"},"position":"shawarma specialist","number":{"$numberInt":"11"}}
+{"_id":{"$oid":"5f23c9fd024d7ded43a06b14"},"position":"roller maker","number":{"$numberInt":"11"}}
+{"_id":{"$oid":"5f23ca0b024d7ded43a06b15"},"position":"waiter","number":{"$numberInt":"12"}}
+{"_id":{"$oid":"5f23ca14024d7ded43a06b16"},"position":"security worker","number":{"$numberInt":"14"}}
+{"_id":{"$oid":"5f23ca2d024d7ded43a06b17"},"position":"cook","number":{"$numberInt":"23"}}
+{"_id":{"$oid":"5f23caa6024d7ded43a06b18"},"position":"the driver","number":{"$numberInt":"21"}}
+{"_id":{"$oid":"5f23caa7024d7ded43a06b19"},"position":"maid","number":{"$numberInt":"28"}}
+{"_id":{"$oid":"5f23caa9024d7ded43a06b1a"},"position":"stylist","number":{"$numberInt":"14"}}
+{"_id":{"$oid":"5f23caaa024d7ded43a06b1b"},"position":"baker","number":{"$numberInt":"28"}}
+{"_id":{"$oid":"5f23cab1024d7ded43a06b1c"},"position":"craftsman","number":{"$numberInt":"12"}}
+{"_id":{"$oid":"5f23cab2024d7ded43a06b1d"},"position":"babysitter","number":{"$numberInt":"12"}}
+{"_id":{"$oid":"5f23cab3024d7ded43a06b1e"},"position":"consultant","number":{"$numberInt":"13"}}
+{"_id":{"$oid":"5f23cab5024d7ded43a06b1f"},"position":"tailor","number":{"$numberInt":"16"}}
+{"_id":{"$oid":"5f23cabd024d7ded43a06b20"},"position":"seller","number":{"$numberInt":"39"}}
+{"_id":{"$oid":"5f23cac0024d7ded43a06b21"},"position":"taxi driver","number":{"$numberInt":"14"}}
+{"_id":{"$oid":"5f23cac1024d7ded43a06b22"},"position":"cashier","number":{"$numberInt":"17"}}
+{"_id":{"$oid":"5f23cafb024d7ded43a06b23"},"position":"dough specialist","number":{"$numberInt":"18"}}
+{"_id":{"$oid":"5f23cb67024d7ded43a06b24"},"position":"hospitable","number":{"$numberInt":"19"}}

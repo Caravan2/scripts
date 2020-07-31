@@ -12,16 +12,20 @@ import sys
 import psycopg2
 from selenium import webdriver
 from selenium.webdriver.common.keys import Keys
+from company import Company_Info
+from test import Check_Company
 # from config import config
 
 myclient = pymongo.MongoClient("mongodb://localhost:27017/")
 mydb = myclient["Companies"]
-mycol = mydb["yell.ge"]
+official = mydb["yell.ge_o"]
+official_not_exists = mydb["yell.ge_o_not_psql"]
+unofficial = mydb["yell.ge_uno"]
 
 
 # driver.implicitly_wait(2)
 
-for i in range(1, 1000):
+for i in range(116, 1000):
 
     url = f"https://www.yell.ge/companies.php?lan=eng&rub={i}&SR_pg=1"
     
@@ -72,6 +76,12 @@ for i in range(1, 1000):
             if company == "" or company == None:
                 continue
 
+            # Company link
+            try:
+                c_link = Selector(response=page).xpath(f'/html/body/div[4]/div/div[2]/div[{d_num}]/div[1]/div[2]/div[2]/div[1]/a/@href').get()
+                c_link = "https://www.yell.ge/" + c_link
+            except Exception as e:
+                c_link = ""
 
             # Address
             try:
@@ -105,7 +115,7 @@ for i in range(1, 1000):
                 if website is None:
                     website = ""
             except Exception as e:
-                website = ""
+                website = None
 
 
             # Email
@@ -124,8 +134,9 @@ for i in range(1, 1000):
                     logo = "https://www.yell.ge/" + check
             except:
                 logo = ""
+
+            returned = Company_Info(c_link)
             
-          
             data = {
                 "company" : company,
                 "address" : address,
@@ -133,12 +144,23 @@ for i in range(1, 1000):
                 "websites" : website,
                 "emails" : email,
                 "logo" : logo,
-                "link" : url
+                "link" : url,
+                "company_link" : c_link,
+                "vat" : returned["vat"]
             }
 
                 
             print(data)
-            mycol.insert_one(data)
-                
+            if returned["vat"] is None:
+                print("Unofficial")
+                unofficial.insert_one(data)
+            else:
+                checking = Check_Company(returned["vat"])
+                if checking == 1:
+                    print("Official - Exists")
+                    official.insert_one(data)
+                else:
+                    print("Official - Does not exist")
+                    official_not_exists.insert_one(data)
 
 # print(main)
